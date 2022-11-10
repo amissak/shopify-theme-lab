@@ -1,8 +1,6 @@
 const path = require('path')
-const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
   stats: 'minimal',
@@ -12,19 +10,14 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['*', '.js', '.vue', '.json'],
+    extensions: ['*', '.js', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm-bundler.js',
       '@': path.resolve(__dirname, '../../src/'),
       '@shopify-directory': path.resolve(__dirname, '../../shopify/')
     }
   },
   module: {
     rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
@@ -74,7 +67,7 @@ module.exports = {
      * docs: https://github.com/johnagan/clean-webpack-plugin
      */
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!*static*']
+      cleanOnceBeforeBuildPatterns: ['bundle.css', 'bundle.js', '!*static*']
     }),
     /**
      * docs: https://webpack.js.org/plugins/mini-css-extract-plugin
@@ -82,11 +75,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: './bundle.css',
       chunkFilename: '[id].css'
-    }),
-    new VueLoaderPlugin(),
-    new webpack.DefinePlugin({
-      __VUE_OPTIONS_API__: 'true',
-      __VUE_PROD_DEVTOOLS__: 'false'
     })
   ]
 }
